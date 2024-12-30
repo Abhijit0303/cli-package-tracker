@@ -25,7 +25,7 @@ A Python CLI tool to track installed packages and automatically generate a `requ
 
    ```bash
    git clone https://github.com/Abhijit0303/cli-package-tracker.git
-   cd package-tracker
+   cd cli-package-tracker
    ```
 
 1. **Install Dependencies**:
