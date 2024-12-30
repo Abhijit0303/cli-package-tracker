@@ -1,26 +1,25 @@
 import click
 from .tracker import PackageTracker
-from .config_manager import set_requirements_file, get_requirements_file
+from .config_manager import get_requirements_file, set_requirements_file
 import os
 
 # Basic details
 APP_NAME = "Package Tracker"
 AUTHOR = "Abhijit"
-EMAIL = "kumarabhijeetpanda3@gmail.com"
-VERSION = "0.1"
+X = "x.com/Abhijitcodex"
+VERSION = "0.2"
 
 def show_basic_details():
     """Display basic details about the app."""
     click.echo(f"Welcome to {APP_NAME}!")
     click.echo(f"Author: {AUTHOR}")
-    click.echo(f"Email: {EMAIL}")
+    click.echo(f"X: {X}")
     click.echo(f"Version: {VERSION}")
     click.echo("--------------------------")
 
 @click.group()
 def cli():
     """A CLI tool to track installed Python packages and generate a requirements.txt file."""
-
     show_basic_details()
 
 @cli.command()
@@ -29,7 +28,6 @@ def cli():
 @click.option('--log-file', prompt='Enter the name of the log file', default='log.txt', help='Name of the log file.')
 def init(requirements_file, enable_logging, log_file):
     """Initialize the package tracker with a file path."""
-
     if not enable_logging:
         log_file = None
     elif not os.path.exists(log_file):
@@ -47,8 +45,11 @@ def init(requirements_file, enable_logging, log_file):
 @click.argument('package_name')
 def install(package_name):
     """Install a package and update the requirements file."""
-
-    tracker = PackageTracker()
+    requirements_file = get_requirements_file()
+    log_file = None  # Default to no logging
+    if os.path.exists("log.txt"):  # Check if logging is enabled
+        log_file = "log.txt"
+    tracker = PackageTracker(log_file)
     try:
         tracker.track_install(package_name)
         click.echo(f"Package {package_name} installed and tracked.")
@@ -59,8 +60,11 @@ def install(package_name):
 @click.argument('package_name')
 def uninstall(package_name):
     """Uninstall a package and update the requirements file."""
-
-    tracker = PackageTracker()
+    requirements_file = get_requirements_file()
+    log_file = None  # Default to no logging
+    if os.path.exists("log.txt"):  # Check if logging is enabled
+        log_file = "log.txt"
+    tracker = PackageTracker(log_file)
     try:
         tracker.track_uninstall(package_name)
         click.echo(f"Package {package_name} uninstalled and removed from tracking.")
